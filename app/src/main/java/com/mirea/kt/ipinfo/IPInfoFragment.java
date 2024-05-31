@@ -34,7 +34,7 @@ import okhttp3.Response;
 public class IPInfoFragment extends Fragment {
 
     private EditText ipInput;
-    private TextView ipInfo;
+    private TextView ipInfo, currentIPTextView;
     private Button searchButton, shareButton;
     private double latitude;
     private double longitude;
@@ -51,8 +51,19 @@ public class IPInfoFragment extends Fragment {
 
         ipInput = view.findViewById(R.id.ip_input);
         ipInfo = view.findViewById(R.id.ip_info);
+        currentIPTextView = view.findViewById(R.id.current_ip);
         searchButton = view.findViewById(R.id.search_button);
         shareButton = view.findViewById(R.id.share_button);
+
+        fetchCurrentIP();
+
+        currentIPTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String currentIP = currentIPTextView.getText().toString().replace("Current IP: ", "").trim();
+                fetchIPInfo(currentIP);
+            }
+        });
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,11 +92,47 @@ public class IPInfoFragment extends Fragment {
         return view;
     }
 
+    private void fetchCurrentIP() {
+        String url = "https://api.ipify.org?format=json";
+        Request request = new Request.Builder().url(url).build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e(TAG, "Error fetching current IP: " + e.getMessage());
+                getActivity().runOnUiThread(() ->
+                        Toast.makeText(getContext(), "Error fetching current IP", Toast.LENGTH_SHORT).show());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String responseBody = response.body().string();
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseBody);
+                        String currentIP = jsonObject.optString("ip");
+                        getActivity().runOnUiThread(() -> {
+                            currentIPTextView.setText("Current IP: " + currentIP);
+                        });
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error processing current IP", e);
+                    }
+                } else {
+                    Log.e(TAG, "Error fetching current IP: " + response.message());
+                    getActivity().runOnUiThread(() ->
+                            Toast.makeText(getContext(), "Error fetching current IP", Toast.LENGTH_SHORT).show());
+                }
+            }
+        });
+    }
+
     private void fetchIPInfo(String ip) {
         if (!isNetworkAvailable()) {
             Toast.makeText(getContext(), "No internet connection", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        // Очистка информации перед новым запросом
+        ipInfo.setText("");
 
         String url1 = "https://ipinfo.io/" + ip + "/json";
         String url2 = "https://ipapi.co/" + ip + "/json/";
