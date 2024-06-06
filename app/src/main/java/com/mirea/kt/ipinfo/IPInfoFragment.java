@@ -60,7 +60,7 @@ public class IPInfoFragment extends Fragment {
         currentIPTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String currentIP = currentIPTextView.getText().toString().replace("Current IP: ", "").trim();
+                String currentIP = currentIPTextView.getText().toString().replace("Текущий IP: ", "").trim();
                 fetchIPInfo(currentIP);
             }
         });
@@ -72,7 +72,7 @@ public class IPInfoFragment extends Fragment {
                 if (!ip.isEmpty()) {
                     fetchIPInfo(ip);
                 } else {
-                    Toast.makeText(getContext(), "Please enter an IP address", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Введите IP адрес", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -84,7 +84,7 @@ public class IPInfoFragment extends Fragment {
                 if (!info.isEmpty()) {
                     shareIPInfo(info);
                 } else {
-                    Toast.makeText(getContext(), "No information to share", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Пока нечем делиться", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -98,9 +98,9 @@ public class IPInfoFragment extends Fragment {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e(TAG, "Error fetching current IP: " + e.getMessage());
+                Log.e(TAG, "Ошибка получения текущего IP: " + e.getMessage());
                 getActivity().runOnUiThread(() ->
-                        Toast.makeText(getContext(), "Error fetching current IP", Toast.LENGTH_SHORT).show());
+                        Toast.makeText(getContext(), "Ошибка получения текущего IP:", Toast.LENGTH_SHORT).show());
             }
 
             @Override
@@ -111,15 +111,15 @@ public class IPInfoFragment extends Fragment {
                         JSONObject jsonObject = new JSONObject(responseBody);
                         String currentIP = jsonObject.optString("ip");
                         getActivity().runOnUiThread(() -> {
-                            currentIPTextView.setText("Current IP: " + currentIP);
+                            currentIPTextView.setText("Текущий IP: " + currentIP);
                         });
                     } catch (Exception e) {
-                        Log.e(TAG, "Error processing current IP", e);
+                        Log.e(TAG, "Ошибка обработки текущего IP:", e);
                     }
                 } else {
-                    Log.e(TAG, "Error fetching current IP: " + response.message());
+                    Log.e(TAG, "Ошибка обработки текущего IP: " + response.message());
                     getActivity().runOnUiThread(() ->
-                            Toast.makeText(getContext(), "Error fetching current IP", Toast.LENGTH_SHORT).show());
+                            Toast.makeText(getContext(), "Ошибка обработки текущего IP:", Toast.LENGTH_SHORT).show());
                 }
             }
         });
@@ -127,18 +127,19 @@ public class IPInfoFragment extends Fragment {
 
     private void fetchIPInfo(String ip) {
         if (!isNetworkAvailable()) {
-            Toast.makeText(getContext(), "No internet connection", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Очистка информации перед новым запросом
         ipInfo.setText("");
 
         String url1 = "https://ipinfo.io/" + ip + "/json";
         String url2 = "https://ipapi.co/" + ip + "/json/";
+        String url3 = "https://api.ipgeolocation.io/ipgeo?apiKey=da61f66a8e354306b77aebda46013adc&ip=" + ip;
 
-        executor.execute(() -> fetchFromUrl(url1, "Source 1"));
-        executor.execute(() -> fetchFromUrl(url2, "Source 2"));
+        executor.execute(() -> fetchFromUrl(url1, "Источник ipinfo.io"));
+        executor.execute(() -> fetchFromUrl(url2, "Источник ipapi.co"));
+        executor.execute(() -> fetchFromUrl(url3, "Источник ipgeolocation.io"));
     }
 
     private void fetchFromUrl(String url, String source) {
@@ -146,9 +147,9 @@ public class IPInfoFragment extends Fragment {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e(TAG, "Error fetching IP info from " + source + ": " + e.getMessage());
+                Log.e(TAG, "Ошибка получения информации от: " + source + ": " + e.getMessage());
                 getActivity().runOnUiThread(() ->
-                        Toast.makeText(getContext(), "Error fetching IP info from " + source, Toast.LENGTH_SHORT).show());
+                        Toast.makeText(getContext(), "Ошибка получения информации от: " + source, Toast.LENGTH_SHORT).show());
             }
 
             @Override
@@ -157,9 +158,9 @@ public class IPInfoFragment extends Fragment {
                     String responseBody = response.body().string();
                     getActivity().runOnUiThread(() -> processIPInfo(responseBody, source));
                 } else {
-                    Log.e(TAG, "Error fetching IP info from " + source + ": " + response.message());
+                    Log.e(TAG, "Ошибка получения информации от: " + source + ": " + response.message());
                     getActivity().runOnUiThread(() ->
-                            Toast.makeText(getContext(), "Error fetching IP info from " + source, Toast.LENGTH_SHORT).show());
+                            Toast.makeText(getContext(), "Ошибка получения информации от: " + source, Toast.LENGTH_SHORT).show());
                 }
             }
         });
@@ -171,40 +172,49 @@ public class IPInfoFragment extends Fragment {
             StringBuilder info = new StringBuilder();
             info.append("\n").append(source).append(":\n");
             info.append("IP: ").append(jsonObject.optString("ip")).append("\n");
-            info.append("Country: ").append(jsonObject.optString("country")).append("\n");
-            info.append("Region: ").append(jsonObject.optString("region")).append("\n");
-            info.append("City: ").append(jsonObject.optString("city")).append("\n");
-
+            if (jsonObject.has("country")){
+                info.append("Код страны: ").append(jsonObject.optString("country")).append("\n");
+            }
+            if (jsonObject.has("country_name")){
+                info.append("Cтрана: ").append(jsonObject.optString("country_name")).append("\n");
+            }
+            if (jsonObject.has("region")){
+                info.append("Регион: ").append(jsonObject.optString("region")).append("\n");
+            }
+            info.append("Город: ").append(jsonObject.optString("city")).append("\n");
+            if (jsonObject.has("org")){
+                info.append("Провайдер: ").append(jsonObject.optString("org")).append("\n");
+            }
+            if (jsonObject.has("organization")){
+                info.append("Провайдер: ").append(jsonObject.optString("organization")).append("\n");
+            }
             if (jsonObject.has("latitude") && jsonObject.has("longitude")) {
                 latitude = jsonObject.optDouble("latitude");
                 longitude = jsonObject.optDouble("longitude");
-                info.append("Latitude: ").append(latitude).append("\n");
-                info.append("Longitude: ").append(longitude).append("\n");
+                info.append("Широта: ").append(latitude).append("\n");
+                info.append("Долгота: ").append(longitude).append("\n");
 
                 getActivity().runOnUiThread(() -> {
                     ipInfo.setOnClickListener(v -> openMap(latitude, longitude));
                 });
             }
 
-            info.append("ISP: ").append(jsonObject.optString("org")).append("\n");
-
             getActivity().runOnUiThread(() -> {
                 ipInfo.append(info.toString());
-                Log.d(TAG, "IP Info (" + source + "): " + info.toString());
+                Log.d(TAG, "Информация об IP (" + source + "): " + info.toString());
             });
         } catch (Exception e) {
-            Log.e(TAG, "Error processing IP info", e);
+            Log.e(TAG, "Ошибка обработки информации об IP", e);
         }
     }
 
     private void openMap(double latitude, double longitude) {
-        Uri gmmIntentUri = Uri.parse("geo:" + latitude + "," + longitude);
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-        mapIntent.setPackage("com.google.android.apps.maps");
+        Uri geoUri = Uri.parse("geo:" + latitude + "," + longitude);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, geoUri);
         if (mapIntent.resolveActivity(getContext().getPackageManager()) != null) {
             startActivity(mapIntent);
         } else {
-            Toast.makeText(getContext(), "Google Maps is not installed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Не найдено доступных приложений карт", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -213,7 +223,7 @@ public class IPInfoFragment extends Fragment {
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, info);
         sendIntent.setType("text/plain");
-        startActivity(Intent.createChooser(sendIntent, "Share IP Info via"));
+        startActivity(Intent.createChooser(sendIntent, "Поделиться информацией об IP"));
     }
 
     private boolean isNetworkAvailable() {

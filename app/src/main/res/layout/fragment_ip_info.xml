@@ -1,48 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/colorBackground"
+    tools:context=".IPInfoFragment">
 
     <TextView
         android:id="@+id/current_ip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Current IP: Fetching..."
-        android:textSize="16sp"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="8dp" />
-
-    <EditText
-        android:id="@+id/ip_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter IP address"
-        android:layout_below="@id/current_ip"
-        android:layout_marginBottom="8dp" />
+        android:text="Текущий IP:"
+        android:textSize="18sp"
+        android:textColor="@color/colorTextPrimary"
+        android:padding="8dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/ip_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Введите IP адрес"
+            android:inputType="text"
+            android:textColor="@color/colorTextPrimary"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/search_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ip_input"
-        android:layout_marginTop="8dp"
-        android:text="Search" />
+        android:text="Поиск"
+        style="@style/Widget.MyApp.Button"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/share_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Поделиться"
+        style="@style/Widget.MyApp.Button"
+        android:layout_marginBottom="16dp"/>
 
     <TextView
         android:id="@+id/ip_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/search_button"
-        android:layout_marginTop="16dp"
-        android:text="IP Information"
-        android:textSize="16sp" />
-
-    <Button
-        android:id="@+id/share_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ip_info"
-        android:layout_marginTop="8dp"
-        android:text="Share" />
-</RelativeLayout>
+        android:text=""
+        android:textSize="16sp"
+        android:textColor="@color/colorTextSecondary"
+        android:padding="8dp"
+        android:background="@color/colorBackground"/>
+</LinearLayout>
