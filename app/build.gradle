@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.mirea.kt.ipinfo'
+    namespace 'com.mirea.kt.ribo'
     compileSdk 34
 
     defaultConfig {

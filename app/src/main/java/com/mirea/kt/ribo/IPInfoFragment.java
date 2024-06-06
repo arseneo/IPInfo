@@ -1,4 +1,4 @@
-package com.mirea.kt.ipinfo;
+package com.mirea.kt.ribo;
 
 import android.content.Context;
 import android.content.Intent;
@@ -214,7 +214,7 @@ public class IPInfoFragment extends Fragment {
         if (mapIntent.resolveActivity(getContext().getPackageManager()) != null) {
             startActivity(mapIntent);
         } else {
-            Toast.makeText(getContext(), "No map application found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Не найдено приложений карт", Toast.LENGTH_SHORT).show();
         }
     }
 

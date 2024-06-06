@@ -1,4 +1,4 @@
-package com.mirea.kt.ipinfo;
+package com.mirea.kt.ribo;
 
 import android.content.Context;
 
