@@ -19,7 +19,7 @@ tools:context=".LoginActivity">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Вход в приложение"
+        android:text="@string/greeting"
         android:textColor="@color/colorPrimary"
         android:textSize="24sp" />
 
@@ -32,7 +32,7 @@ tools:context=".LoginActivity">
         android:id="@+id/edit_text_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Логин"
+        android:hint="@string/login_hint"
         android:inputType="text"
         android:textColor="@color/colorTextPrimary"/>
 </com.google.android.material.textfield.TextInputLayout>
@@ -46,7 +46,7 @@ tools:context=".LoginActivity">
         android:id="@+id/edit_text_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Пароль"
+        android:hint="@string/password_hint"
         android:inputType="textPassword"
         android:textColor="@color/colorTextPrimary"/>
 </com.google.android.material.textfield.TextInputLayout>
@@ -55,7 +55,7 @@ tools:context=".LoginActivity">
     android:id="@+id/button_login"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="Вход"
+    android:text="@string/login_button"
     style="@style/Widget.MyApp.Button"/>
 
 <TextView
@@ -64,7 +64,7 @@ tools:context=".LoginActivity">
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
     android:layout_marginBottom="55dp"
-    android:text="Разработчик: Корнеев Арсений, группа РИБО-04-22"
+    android:text="@string/developer"
     android:textAlignment="center"
     android:textSize="16sp" />
 

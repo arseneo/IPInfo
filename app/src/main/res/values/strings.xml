@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">IPInfo</string>
+    <string name="group">RIBO-04-22</string>
+    <string name="login_hint">Логин</string>
+    <string name="password_hint">Пароль</string>
+    <string name="login_button">Войти</string>
+    <string name="fetching_ip">Текущий IP: Получение...</string>
+    <string name="current_ip">Текущий IP: </string>
+    <string name="enter_ip_hint">Введите IP адрес</string>
+    <string name="search_button">Поиск</string>
+    <string name="ip_information">Здесь появится информация об IP. Чтобы получить информацию о текущем IP, нажмите на него.</string>
+    <string name="share_button">Поделиться</string>
+    <string name="error_fetching_current_ip">Ошибка получения текущего IP</string>
+    <string name="error_occurred">Произошла ошибка: </string>
+    <string name="authentication_failed">Аутентификация не удалась</string>
+    <string name="authentication_successful">Аутентификация успешна</string>
+    <string name="please_enter_ip">Введите IP адрес</string>
+    <string name="no_information_to_share">Пока нечем делиться</string>
+    <string name="no_internet_connection">Нет подключения к интернету</string>
+    <string name="no_map_application_found">Не найдено приложений карт</string>
+    <string name="greeting">Вход в приложение</string>
+    <string name="developer">Разработчик: Корнеев Арсений, группа РИБО-04-22</string>
 </resources>

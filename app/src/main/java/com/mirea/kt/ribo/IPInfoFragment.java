@@ -60,7 +60,7 @@ public class IPInfoFragment extends Fragment {
         currentIPTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String currentIP = currentIPTextView.getText().toString().replace("Текущий IP: ", "").trim();
+                String currentIP = currentIPTextView.getText().toString().replace(getString(R.string.current_ip), "").trim();
                 fetchIPInfo(currentIP);
             }
         });
@@ -72,7 +72,7 @@ public class IPInfoFragment extends Fragment {
                 if (!ip.isEmpty()) {
                     fetchIPInfo(ip);
                 } else {
-                    Toast.makeText(getContext(), "Введите IP адрес", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.please_enter_ip), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -84,7 +84,7 @@ public class IPInfoFragment extends Fragment {
                 if (!info.isEmpty()) {
                     shareIPInfo(info);
                 } else {
-                    Toast.makeText(getContext(), "Пока нечем делиться", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.no_information_to_share), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -98,9 +98,9 @@ public class IPInfoFragment extends Fragment {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e(TAG, "Ошибка получения текущего IP: " + e.getMessage());
+                Log.e(TAG, getString(R.string.error_fetching_current_ip) + e.getMessage());
                 getActivity().runOnUiThread(() ->
-                        Toast.makeText(getContext(), "Ошибка получения текущего IP:", Toast.LENGTH_SHORT).show());
+                        Toast.makeText(getContext(), getString(R.string.error_fetching_current_ip), Toast.LENGTH_SHORT).show());
             }
 
             @Override
@@ -111,15 +111,15 @@ public class IPInfoFragment extends Fragment {
                         JSONObject jsonObject = new JSONObject(responseBody);
                         String currentIP = jsonObject.optString("ip");
                         getActivity().runOnUiThread(() -> {
-                            currentIPTextView.setText("Текущий IP: " + currentIP);
+                            currentIPTextView.setText(getString(R.string.current_ip) + " " + currentIP);
                         });
                     } catch (Exception e) {
-                        Log.e(TAG, "Ошибка обработки текущего IP:", e);
+                        Log.e(TAG, getString(R.string.error_fetching_current_ip), e);
                     }
                 } else {
-                    Log.e(TAG, "Ошибка обработки текущего IP: " + response.message());
+                    Log.e(TAG, R.string.error_fetching_current_ip + response.message());
                     getActivity().runOnUiThread(() ->
-                            Toast.makeText(getContext(), "Ошибка обработки текущего IP:", Toast.LENGTH_SHORT).show());
+                            Toast.makeText(getContext(), getString(R.string.error_fetching_current_ip), Toast.LENGTH_SHORT).show());
                 }
             }
         });
@@ -127,7 +127,7 @@ public class IPInfoFragment extends Fragment {
 
     private void fetchIPInfo(String ip) {
         if (!isNetworkAvailable()) {
-            Toast.makeText(getContext(), "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getString(R.string.no_internet_connection), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -147,9 +147,9 @@ public class IPInfoFragment extends Fragment {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e(TAG, "Ошибка получения информации от: " + source + ": " + e.getMessage());
+                Log.e(TAG, getString(R.string.error_occurred) + source + ": " + e.getMessage());
                 getActivity().runOnUiThread(() ->
-                        Toast.makeText(getContext(), "Ошибка получения информации от: " + source, Toast.LENGTH_SHORT).show());
+                        Toast.makeText(getContext(), getString(R.string.error_occurred) + ": " + source, Toast.LENGTH_SHORT).show());
             }
 
             @Override
@@ -158,9 +158,9 @@ public class IPInfoFragment extends Fragment {
                     String responseBody = response.body().string();
                     getActivity().runOnUiThread(() -> processIPInfo(responseBody, source));
                 } else {
-                    Log.e(TAG, "Ошибка получения информации от: " + source + ": " + response.message());
+                    Log.e(TAG, getString(R.string.error_occurred) + source + ": " + response.message());
                     getActivity().runOnUiThread(() ->
-                            Toast.makeText(getContext(), "Ошибка получения информации от: " + source, Toast.LENGTH_SHORT).show());
+                            Toast.makeText(getContext(), getString(R.string.error_occurred) + source, Toast.LENGTH_SHORT).show());
                 }
             }
         });
@@ -204,7 +204,7 @@ public class IPInfoFragment extends Fragment {
                 Log.d(TAG, "Информация об IP (" + source + "): " + info.toString());
             });
         } catch (Exception e) {
-            Log.e(TAG, "Ошибка обработки информации об IP", e);
+            Log.e(TAG, getString(R.string.error_occurred), e);
         }
     }
 
@@ -214,20 +214,16 @@ public class IPInfoFragment extends Fragment {
         if (mapIntent.resolveActivity(getContext().getPackageManager()) != null) {
             startActivity(mapIntent);
         } else {
-            Toast.makeText(getContext(), "Не найдено приложений карт", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getString(R.string.no_map_application_found), Toast.LENGTH_SHORT).show();
         }
     }
-
-
-
-
 
     private void shareIPInfo(String info) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, info);
         sendIntent.setType("text/plain");
-        startActivity(Intent.createChooser(sendIntent, "Поделиться информацией об IP"));
+        startActivity(Intent.createChooser(sendIntent, getString(R.string.share_button)));
     }
 
     private boolean isNetworkAvailable() {

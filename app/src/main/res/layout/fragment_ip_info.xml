@@ -13,7 +13,7 @@
         android:id="@+id/current_ip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Текущий IP:"
+        android:text="@string/fetching_ip"
         android:textSize="18sp"
         android:textColor="@color/colorTextPrimary"
         android:padding="8dp"
@@ -31,7 +31,7 @@
             android:id="@+id/ip_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Введите IP адрес"
+            android:hint="@string/enter_ip_hint"
             android:inputType="text"
             android:textColor="@color/colorTextPrimary"/>
     </com.google.android.material.textfield.TextInputLayout>
@@ -40,7 +40,7 @@
         android:id="@+id/search_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Поиск"
+        android:text="@string/search_button"
         style="@style/Widget.MyApp.Button"
         android:layout_marginBottom="16dp"/>
 
@@ -48,7 +48,7 @@
         android:id="@+id/share_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Поделиться"
+        android:text="@string/share_button"
         style="@style/Widget.MyApp.Button"
         android:layout_marginBottom="16dp"/>
 
@@ -56,7 +56,7 @@
         android:id="@+id/ip_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="@string/ip_information"
         android:textSize="16sp"
         android:textColor="@color/colorTextSecondary"
         android:padding="8dp"
