@@ -134,11 +134,11 @@ public class IPInfoFragment extends Fragment {
         ipInfo.setText("");
 
         String url1 = "https://ipinfo.io/" + ip + "/json";
-        String url2 = "https://ipapi.co/" + ip + "/json/";
+        //String url2 = "https://ipapi.co/" + ip + "/json/";
         String url3 = "https://api.ipgeolocation.io/ipgeo?apiKey=da61f66a8e354306b77aebda46013adc&ip=" + ip;
 
         executor.execute(() -> fetchFromUrl(url1, "Источник ipinfo.io"));
-        executor.execute(() -> fetchFromUrl(url2, "Источник ipapi.co"));
+        //executor.execute(() -> fetchFromUrl(url2, "Источник ipapi.co"));
         executor.execute(() -> fetchFromUrl(url3, "Источник ipgeolocation.io"));
     }
 
@@ -209,14 +209,18 @@ public class IPInfoFragment extends Fragment {
     }
 
     private void openMap(double latitude, double longitude) {
-        Uri geoUri = Uri.parse("geo:" + latitude + "," + longitude);
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, geoUri);
+        Uri gmmIntentUri = Uri.parse("geo:" + latitude + "," + longitude);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         if (mapIntent.resolveActivity(getContext().getPackageManager()) != null) {
             startActivity(mapIntent);
         } else {
-            Toast.makeText(getContext(), "Не найдено доступных приложений карт", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "No map application found", Toast.LENGTH_SHORT).show();
         }
     }
+
+
+
+
 
     private void shareIPInfo(String info) {
         Intent sendIntent = new Intent();
